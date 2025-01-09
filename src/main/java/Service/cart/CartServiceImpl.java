@@ -22,8 +22,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart addToCart(int userId, int productId, int quantity) {
-        Product product = productRepository.findById((long) productId)
+    public Cart addToCart(Long userId, Long productId, int quantity) {
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
 
         if (product.getQuantity() < quantity) {
@@ -45,18 +45,18 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Cart> getAllCartItemsForUser(int userId) {
+    public List<Cart> getAllCartItemsForUser(Long userId) {
         return cartRepository.findAllByUserId(userId);
     }
 
     @Override
-    public void removeCartItem(int userId, int productId) {
+    public void removeCartItem(Long userId, Long productId) {
         cartRepository.findByUserIdAndProductId(userId, productId)
                 .ifPresent(cartRepository::delete);
     }
 
     @Override
-    public void clearCartForUser(int userId) {
+    public void clearCartForUser(Long userId) {
         cartRepository.deleteAllByUserId(userId);
     }
 }

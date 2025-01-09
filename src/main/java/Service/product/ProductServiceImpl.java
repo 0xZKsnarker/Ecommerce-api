@@ -6,19 +6,16 @@ import org.springframework.stereotype.Service;
 import repository.ProductRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final ProductRepository productRepository;
+
     @Autowired
-   private ProductRepository productRepository;
-
-
-   public ProductServiceImpl(ProductRepository theProductRepository){
-        productRepository = theProductRepository;
-   }
-
+    public ProductServiceImpl(ProductRepository theProductRepository){
+        this.productRepository = theProductRepository;
+    }
 
     @Override
     public Product save(Product theProduct) {
@@ -36,14 +33,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findById(long theId) {
+    public Product findById(Long theId) {
         return productRepository.findById(theId)
                 .orElseThrow(() -> new RuntimeException("Did not find product id - " + theId));
     }
 
-
     @Override
-    public void deleteById(long theId) {
+    public void deleteById(Long theId) {
         productRepository.deleteById(theId);
     }
 }

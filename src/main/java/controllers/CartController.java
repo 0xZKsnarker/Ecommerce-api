@@ -19,23 +19,26 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public Cart addToCart(@RequestParam int userId, @RequestParam int productId, @RequestParam int quantity) {
+    public Cart addToCart(@RequestParam Long userId,
+                          @RequestParam Long productId,
+                          @RequestParam int quantity) {
         return cartService.addToCart(userId, productId, quantity);
     }
 
     @GetMapping("/{userId}")
-    public List<Cart> getCartForUser(@PathVariable int userId) {
+    public List<Cart> getCartForUser(@PathVariable Long userId) {
         return cartService.getAllCartItemsForUser(userId);
     }
 
     @DeleteMapping("/remove")
-    public String removeCartItem(@RequestParam int userId, @RequestParam int productId) {
+    public String removeCartItem(@RequestParam Long userId,
+                                 @RequestParam Long productId) {
         cartService.removeCartItem(userId, productId);
         return "Removed product " + productId + " from cart for user " + userId;
     }
 
     @DeleteMapping("/clear/{userId}")
-    public String clearCart(@PathVariable int userId) {
+    public String clearCart(@PathVariable Long userId) {
         cartService.clearCartForUser(userId);
         return "Cleared cart for user " + userId;
     }

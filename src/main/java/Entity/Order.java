@@ -1,83 +1,49 @@
 package Entity;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
 @Data
+@Entity
+@Table(name = "orders")
 public class Order {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int user_id;
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    // Example: Use a reference to the User entity
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
-    public void setPayment_id(int payment_id) {
-        this.payment_id = payment_id;
-    }
+    private double totalPrice;
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    // If you want to store a payment reference (e.g., an integer, string, or token):
+    private int paymentId;  // optional, skip if not doing payments yet
 
-    public void setTotal_price(double total_price) {
-        this.total_price = total_price;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    private double total_price;
-
-    public Long getId() {
-        return id;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public double getTotal_price() {
-        return total_price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public int getPayment_id() {
-        return payment_id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    private String status;
-    private int payment_id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
 
+    // A typical order includes multiple items
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

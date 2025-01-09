@@ -2,17 +2,17 @@ package repository;
 
 import Entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    // Find all cart items for a specific user
-    List<Cart> findAllByUserId(int userId);
 
-    // Find a specific cart item by user and product
-    Optional<Cart> findByUserIdAndProductId(int userId, int productId);
+    List<Cart> findAllByUserId(Long userId);
 
-    // Remove all cart items for a specific user
-    void deleteAllByUserId(int userId);
+    Optional<Cart> findByUserIdAndProductId(Long userId, Long productId);
+
+    void deleteAllByUserId(Long userId);
 }
